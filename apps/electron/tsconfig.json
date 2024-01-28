@@ -1,0 +1,24 @@
+{ 
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [
+    "src/renderer/src/env.d.ts",
+    "src/renderer/src/**/*",
+    "src/renderer/src/**/*.vue",
+    "src/preload/*.d.ts"
+  ],
+  "references": [
+    {
+      "path": "../../apps/server/tsconfig.json"
+    },
+    {
+      "path": "./tsconfig.web.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "compilerOptions": {
+    "moduleResolution": "node"
+  }
+}

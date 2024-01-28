@@ -1,0 +1,16 @@
+{
+  "name": "tRPC-monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm run --parallel dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron-vite": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+}

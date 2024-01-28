@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./apps",
+        "paths": {
+            "@server/*": ["server/src/*"],
+            "@electron/*": ["electron/src/renderer/*"],
+        }
+    }
+}
