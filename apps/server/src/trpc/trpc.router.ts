@@ -3,6 +3,10 @@ import { TrpcService } from "@server/trpc/trpc.service";
 import { z } from "zod";
 import * as trpcExpress from "@trpc/server/adapters/express";
 
+
+// import the createTRPCContext function (express adapter need)
+import { createContext } from './trpc.context';
+
 @Injectable()
 export class TrpcRouter {
     constructor(private readonly trpc: TrpcService) {}
@@ -15,12 +19,11 @@ export class TrpcRouter {
                     name: z.string().optional(),
                 })
             )
-            .query(({input}) => {
-                const { name } = input;
+            .query((opts) => {
+                const { name } = opts.input;
                 //console.log(`name: ${name}`);
-                return { text: `Hello ${name ? name :  `AAA`} this is trpc!`,
-            };
-        }),
+                return { text: `Hello ${name ? name :  `no name found`} this is trpc! Your token in header is ${opts.ctx.token}` };
+            })
     });
 
     async applyMiddleware(app: INestApplication) {
@@ -28,6 +31,7 @@ export class TrpcRouter {
         app.use(`/trpc`,
             trpcExpress.createExpressMiddleware({
                 router: this.appRouter,
+                createContext,
             }),
         );
     }

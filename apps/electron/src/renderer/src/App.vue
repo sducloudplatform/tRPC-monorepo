@@ -6,7 +6,7 @@ import type { AppRouter } from "@server/trpc/trpc.router";
 
 import { ref } from "vue";
 
-
+const token = `ttttttoooooookkkkkkeeeeeennnnnnn`;
 
 const trpc = createTRPCProxyClient<AppRouter>({
   links: [
@@ -17,15 +17,20 @@ const trpc = createTRPCProxyClient<AppRouter>({
         credentials: "include",
       });
     } */
+    headers(opts) {
+        return{
+          Authorization: `Bearer ${token}`,
+        }
+    },
     })
   ],
-  transformer: undefined
+  transformer: undefined //this line is mandatory :(
 });
 
-const message = ref(`Please click to send tRPC call hello to the Nest.js server`);
+const message = ref(`Please click to send tRPC call with token to the Nest.js server`);
+
 
 const hello = () => {
-  message.value = `Sending tRPC call hello to the Nest.js server`;
   trpc.hello.query({name: "AAA"}).then((res) => {
     message.value = res.text;
   }).catch((err) => {
