@@ -11,12 +11,6 @@
     {
       "path": "../../apps/server/tsconfig.json"
     },
-    {
-      "path": "./tsconfig.web.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
   ],
   "compilerOptions": {
     "moduleResolution": "node"

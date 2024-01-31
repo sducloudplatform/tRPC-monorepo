@@ -1,6 +1,9 @@
 
 # tRPC Monorepo
 
+**需要关闭vscode默认typescript插件，使用Volar Takeover Mode**
+https://vuejs.org/guide/typescript/overview.html#volar-takeover-mode
+
 A very simple Demo shows how 
 
 **frontend** (electron-vite + vue3-ts) 
