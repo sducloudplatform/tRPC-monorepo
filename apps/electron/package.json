@@ -8,8 +8,8 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts,.vue --fix",
-    "typecheck:node": "tsc -b --noEmit -p tsconfig.node.json --composite false",
-    "typecheck:web": "vue-tsc -b --noEmit -p tsconfig.web.json --composite false",
+    "typecheck:node": "tsc --noEmit",
+    "typecheck:web": "pnpm run -F common build && vue-tsc --noEmit",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
@@ -24,8 +24,6 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
-    "@trpc/client": "^10.45.0",
-    "@trpc/server": "^10.45.0",
     "electron-updater": "^6.1.7"
   },
   "devDependencies": {

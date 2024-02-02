@@ -8,12 +8,20 @@ importers:
 
   .:
     devDependencies:
+      '@trpc/client':
+        specifier: ^10.45.0
+        version: 10.45.0(@trpc/server@10.45.0)
+      '@trpc/server':
+        specifier: ^10.45.0
+        version: 10.45.0
       electron-vite:
         specifier: ^2.0.0
         version: 2.0.0(vite@5.0.12)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
+
+  apps/common: {}
 
   apps/electron:
     dependencies:
@@ -23,12 +31,6 @@ importers:
       '@electron-toolkit/utils':
         specifier: ^3.0.0
         version: 3.0.0(electron@28.2.0)
-      '@trpc/client':
-        specifier: ^10.45.0
-        version: 10.45.0(@trpc/server@10.45.0)
-      '@trpc/server':
-        specifier: ^10.45.0
-        version: 10.45.0
       electron-updater:
         specifier: ^6.1.7
         version: 6.1.7
@@ -190,9 +192,6 @@ importers:
       '@nestjs/platform-express':
         specifier: ^10.0.0
         version: 10.3.1(@nestjs/common@10.3.1)(@nestjs/core@10.3.1)
-      '@trpc/server':
-        specifier: ^10.45.0
-        version: 10.45.0
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.14
@@ -4152,11 +4151,11 @@ packages:
       '@trpc/server': 10.45.0
     dependencies:
       '@trpc/server': 10.45.0
-    dev: false
+    dev: true
 
   /@trpc/server@10.45.0:
     resolution: {integrity: sha512-2Fwzv6nqpE0Ie/G7PeS0EVR89zLm+c1Mw7T+RAGtU807j4oaUx0zGkBXTu5u9AI+j+BYNN2GZxJcuDTAecbr1A==}
-    dev: false
+    dev: true
 
   /@tsconfig/node10@1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}

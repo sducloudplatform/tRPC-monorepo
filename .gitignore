@@ -4,3 +4,4 @@ build
 .env
 out
 .DS_Store
+**/**/tsconfig.tsbuildinfo

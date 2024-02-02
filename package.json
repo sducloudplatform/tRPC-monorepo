@@ -11,6 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "electron-vite": "^2.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "@trpc/client": "^10.45.0",
+    "@trpc/server": "^10.45.0"
   }
 }
