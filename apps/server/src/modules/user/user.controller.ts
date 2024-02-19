@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Body, Controller, Get, UseGuards, Request, Query} from '@nestjs/common';
+=======
+import { Body, Controller, Get, UseGuards, Request} from '@nestjs/common';
+>>>>>>> 834b01fd14c1c358e74c3bc31406d14871b63d8d
 
 import { Post } from '@nestjs/common';
 
@@ -20,10 +24,13 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { AccessTokenGuard } from '@server/auth/access-token.guard';
 import { Public } from '@server/commom/decorators/public.decorator';
 import { RedisService } from '@server/commom/db/redis.service';
+<<<<<<< HEAD
 import { OPTIONAL_DEPS_METADATA } from '@nestjs/common/constants';
 import { options } from 'joi';
 import { ContextCreator } from '@nestjs/core/helpers/context-creator';
 import { validUserDto } from './dto/vaild-user.dto';
+=======
+>>>>>>> 834b01fd14c1c358e74c3bc31406d14871b63d8d
 
 
 @Controller('user')
@@ -53,6 +60,10 @@ export class UserController {
 
 
     @Post('signUp')
+<<<<<<< HEAD
+=======
+    @Public()
+>>>>>>> 834b01fd14c1c358e74c3bc31406d14871b63d8d
     async signUp(@Body() signUpDto:SignUpDto) {
     // TODO sign up
     // async createUser(data: Prisma.userCreateInput): Promise<user> {
@@ -87,8 +98,14 @@ export class UserController {
 
   }
   //登录
+<<<<<<< HEAD
     @Post('signIn')
     async signIn(@Body() findUserDto:FindUserDto) {
+=======
+  @Post('signIn')
+  @Public()
+  async signIn(@Body() findUserDto:FindUserDto) {
+>>>>>>> 834b01fd14c1c358e74c3bc31406d14871b63d8d
     const { username, password } = findUserDto
 
     const user = await this.userService.FindOneByUsername(username)
@@ -100,6 +117,7 @@ export class UserController {
       throw new UnauthorizedException('Password is incorrect')
 
     return await this.generateTokens(user,this.reidsConfiguration.ttl)
+<<<<<<< HEAD
     }
 
     @Get('refreshToken')
@@ -117,6 +135,11 @@ export class UserController {
 
 
   async refreshToken1(username:string,tokenCreatTime:number){
+=======
+  }
+
+  async refreshToken(username:string,tokenCreatTime:number){
+>>>>>>> 834b01fd14c1c358e74c3bc31406d14871b63d8d
     //  const user=this.userService.FindOneByUsername(username)
      
 

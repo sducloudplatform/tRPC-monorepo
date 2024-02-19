@@ -1,0 +1,17 @@
+{ 
+  "extends": "../../tsconfig.base.json",
+  "include": [
+    "src/**/*",
+  ],
+  "references": [
+    {
+      "path": "../server/tsconfig.json"
+    },
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "esnext",
+    "declaration": true
+  }
+}

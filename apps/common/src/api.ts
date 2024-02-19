@@ -1,5 +1,6 @@
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 
+
 // from server
 import type { AppRouter } from "@server/index"
 
@@ -7,19 +8,20 @@ const token = `ttttttoooooookkkkkkeeeeeennnnnnn`;
 
 export const trpc = createTRPCProxyClient<AppRouter>({
   links: [
-    httpBatchLink({ url: "http://localhost:3000/trpc", 
-/*     fetch(url, options) {
+    httpBatchLink({
+      url: "http://localhost:3000/trpc",
+      /*     fetch(url, options) {
       return fetch(url, {
-        ...options,
-        credentials: "include",
+      ...options,
+      credentials: "include",
       });
-    } */
-    headers(opts) {
-        return{
+      } */
+      headers(opts) {
+        return {
           Authorization: `Bearer ${token}`,
-        }
-    },
+        };
+      },
     })
   ],
-  transformer: undefined //this line is mandatory :(
+  transformer: undefined
 });

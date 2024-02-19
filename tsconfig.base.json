@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
-        "baseUrl": "./apps",
+        "baseUrl": ".",
         "paths": {
-            "@server/*": ["server/src/*"],
-            "@electron/*": ["electron/src/renderer/*"],
+            "@server/*": ["apps/server/src/*"],
+            "@electron/*": ["apps/electron/src/renderer/*"],
+            "@common/*": ["apps/common/src/*"],
+            "@trpc/*": ["node_modules/@trpc/*"],
         }
     }
 }

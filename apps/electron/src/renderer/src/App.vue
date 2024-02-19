@@ -4,7 +4,7 @@
 
 import { ref } from "vue";
 
-import { trpc } from "@electron/src/api";
+import { trpc } from "@common/api";
 
 const message = ref(`Please click to send tRPC call with token to the Nest.js server`);
 
