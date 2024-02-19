@@ -10,11 +10,13 @@ const message = ref(`Please click to send tRPC call with token to the Nest.js se
 
 
 const hello = () => {
-  trpc.hello.query({name: "AAA"}).then((res) => {
-    message.value = res.text;
-  }).catch((err) => {
-    message.value = err;
-  });
+  // trpc.hello.query({name: "AAA"}).then((res) => {
+  //   message.value = res.text;
+  // }).catch((err) => {
+  //   message.value = err;
+  // });
+  
+  
 }
 
 

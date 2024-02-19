@@ -1,7 +1,7 @@
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 
 // from server
-import type { AppRouter } from "@server/trpc/trpc.router";
+import type { AppRouter } from "@server/index"
 
 const token = `ttttttoooooookkkkkkeeeeeennnnnnn`;
 

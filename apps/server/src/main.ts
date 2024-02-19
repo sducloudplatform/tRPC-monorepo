@@ -1,14 +1,20 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { TrpcRouter } from '@server/trpc/trpc.router';
+import * as tRpcExpress from '@trpc/server/adapters/express'
+import { AccessTokenGuard } from './auth/access-token.guard';
+import { JwtSecretRequestType, JwtService } from '@nestjs/jwt';
+import { ConfigType, registerAs } from '@nestjs/config'
+import jwtConfig from './commom/config/jwt.config';
+const listenPost = 3000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
-  const trpc = app.get(TrpcRouter);
-  trpc.applyMiddleware(app);
-  app.listen(3000).then(() => {
-    console.log('Listening at http://localhost:3000');
-  });
+ 
+  
+  console.log(`listen in http://localhost:${listenPost}`)
+
+
+
+  await app.listen(listenPost);
 }
 bootstrap();

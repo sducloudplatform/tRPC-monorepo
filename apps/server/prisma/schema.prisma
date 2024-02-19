@@ -1,0 +1,298 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model admin_info {
+  displayid        Int        @id @default(autoincrement())
+  relation_uid     Int
+  name             String?    @db.VarChar(255)
+  workplace        String?    @db.VarChar(255)
+  phone            String?    @db.VarChar(255)
+  intro            String?    @db.VarChar(255)
+  relation_groupid Int?
+  usergroup        usergroup? @relation(fields: [relation_groupid], references: [groupid], onDelete: NoAction, onUpdate: NoAction, map: "admin_info_ibfk_2")
+  user             user       @relation(fields: [relation_uid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "admin_info_ibfk_3")
+
+  @@index([relation_groupid], map: "relation_groupid")
+  @@index([relation_uid], map: "relation_uid")
+}
+
+model character {
+  characterid   Int     @id
+  charactername String? @db.VarChar(255)
+  user          user[]
+}
+
+model conversation {
+  convid                               Int       @id
+  relation_orderid                     Int?
+  talk_user1id                         Int?
+  talk_user2id                         Int?
+  order                                order?    @relation(fields: [relation_orderid], references: [orderid], onDelete: NoAction, onUpdate: NoAction, map: "conversation_ibfk_1")
+  user_conversation_talk_user1idTouser user?     @relation("conversation_talk_user1idTouser", fields: [talk_user1id], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "conversation_ibfk_2")
+  user_conversation_talk_user2idTouser user?     @relation("conversation_talk_user2idTouser", fields: [talk_user2id], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "conversation_ibfk_3")
+  message                              message[]
+
+  @@index([relation_orderid], map: "relation_orderid")
+  @@index([talk_user1id], map: "talk_user1id")
+  @@index([talk_user2id], map: "talk_user2id")
+}
+
+model default_requirement {
+  displayid           Int               @id @default(autoincrement())
+  relation_productid  Int
+  relation_doctorid   Int?
+  relation_categoryid Int?
+  require_text        String?           @db.VarChar(255)
+  product             product           @relation(fields: [relation_productid], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "default_requirement_ibfk_1")
+  require_category    require_category? @relation(fields: [relation_categoryid], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "default_requirement_ibfk_3")
+  user                user?             @relation(fields: [relation_doctorid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "default_requirement_ibfk_4")
+
+  @@index([relation_categoryid], map: "relation_categoryid")
+  @@index([relation_doctorid], map: "relation_doctorid")
+  @@index([relation_productid], map: "relation_productid")
+}
+
+model doc_org_relation {
+  displayid      Int           @id @default(autoincrement())
+  doctor_uid     Int?
+  relation_orgid Int?
+  organization   organization? @relation(fields: [relation_orgid], references: [orgid], onDelete: NoAction, onUpdate: NoAction, map: "doc_org_relation_ibfk_2")
+  user           user?         @relation(fields: [doctor_uid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "doc_org_relation_ibfk_3")
+
+  @@index([doctor_uid], map: "doctor_uid")
+  @@index([relation_orgid], map: "relation_orgid")
+}
+
+model doctor_info {
+  displayid        Int        @id @default(autoincrement())
+  relation_uid     Int
+  name             String?    @db.VarChar(255)
+  workplace        String?    @db.VarChar(255)
+  phone            String?    @db.VarChar(255)
+  intro            String?    @db.VarChar(255)
+  relation_groupid Int?
+  usergroup        usergroup? @relation(fields: [relation_groupid], references: [groupid], onDelete: NoAction, onUpdate: NoAction, map: "doctor_info_ibfk_2")
+  user             user       @relation(fields: [relation_uid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "doctor_info_ibfk_3")
+
+  @@index([relation_groupid], map: "relation_groupid")
+  @@index([relation_uid], map: "relation_uid")
+}
+
+model employee_info {
+  displayid        Int        @id @default(autoincrement())
+  relation_uid     Int
+  name             String?    @db.VarChar(255)
+  workplace        String?    @db.VarChar(255)
+  phone            String?    @db.VarChar(255)
+  intro            String?    @db.VarChar(255)
+  relation_groupid Int?
+  usergroup        usergroup? @relation(fields: [relation_groupid], references: [groupid], onDelete: NoAction, onUpdate: NoAction, map: "employee_info_ibfk_2")
+  user             user       @relation(fields: [relation_uid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "employee_info_ibfk_3")
+
+  @@index([relation_groupid], map: "relation_groupid")
+  @@index([relation_uid], map: "relation_uid")
+}
+
+model material {
+  material_id   Int       @id
+  material_name String?   @db.VarChar(255)
+  product       product[]
+}
+
+model message {
+  msgid           Int           @id
+  relation_convid Int?
+  text            String?       @db.VarChar(255)
+  time            DateTime?     @db.DateTime(0)
+  whosend_uid     Int?
+  conversation    conversation? @relation(fields: [relation_convid], references: [convid], onDelete: NoAction, onUpdate: NoAction, map: "message_ibfk_1")
+  user            user?         @relation(fields: [whosend_uid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "message_ibfk_2")
+
+  @@index([relation_convid], map: "relation_convid")
+  @@index([whosend_uid], map: "whosend_uid")
+}
+
+model order {
+  orderid                      Int            @id
+  ordernumber                  String?        @db.VarChar(255)
+  petient_uid                  Int?
+  relation_orgid               Int?
+  doctor_uid                   Int?
+  conversation                 conversation[]
+  organization                 organization?  @relation(fields: [relation_orgid], references: [orgid], onDelete: NoAction, onUpdate: NoAction, map: "order_ibfk_2")
+  user_order_petient_uidTouser user?          @relation("order_petient_uidTouser", fields: [petient_uid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "order_ibfk_3")
+  user_order_doctor_uidTouser  user?          @relation("order_doctor_uidTouser", fields: [doctor_uid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "order_ibfk_4")
+  orderproduct                 orderproduct[]
+
+  @@index([doctor_uid], map: "doctor_uid")
+  @@index([petient_uid], map: "petient_uid")
+  @@index([relation_orgid], map: "relation_orgid")
+}
+
+model orderproduct {
+  orderproduct_id    Int           @id
+  relation_productid Int?
+  relation_orderid   Int?
+  product            product?      @relation(fields: [relation_productid], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "orderproduct_ibfk_1")
+  order              order?        @relation(fields: [relation_orderid], references: [orderid], onDelete: NoAction, onUpdate: NoAction, map: "orderproduct_ibfk_2")
+  requirement        requirement[]
+  workorder          workorder[]
+
+  @@index([relation_orderid], map: "relation_orderid")
+  @@index([relation_productid], map: "relation_productid")
+}
+
+model organization {
+  orgid            Int                @id
+  orgname          String?            @db.VarChar(255)
+  orgdescription   String?            @db.VarChar(255)
+  doc_org_relation doc_org_relation[]
+  order            order[]
+  patient_info     patient_info[]
+}
+
+model patient_info {
+  displayid        Int           @id @default(autoincrement())
+  relation_uid     Int
+  name             String?       @db.VarChar(255)
+  workplace        String?       @db.VarChar(255)
+  phone            String?       @db.VarChar(255)
+  intro            String?       @db.VarChar(255)
+  relation_groupid Int?
+  relation_orgid   Int?
+  usergroup        usergroup?    @relation(fields: [relation_groupid], references: [groupid], onDelete: NoAction, onUpdate: NoAction, map: "patient_info_ibfk_2")
+  organization     organization? @relation(fields: [relation_orgid], references: [orgid], onDelete: NoAction, onUpdate: NoAction, map: "patient_info_ibfk_3")
+  user             user          @relation(fields: [relation_uid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "patient_info_ibfk_4")
+
+  @@index([relation_groupid], map: "relation_groupid")
+  @@index([relation_orgid], map: "relation_orgid")
+  @@index([relation_uid], map: "relation_uid")
+}
+
+model proc_emp_relation {
+  displayid           Int     @id @default(autoincrement())
+  relation_processid  Int
+  relation_employeeid Int?
+  process             process @relation(fields: [relation_processid], references: [process_id], onDelete: NoAction, onUpdate: NoAction, map: "proc_emp_relation_ibfk_1")
+  user                user?   @relation(fields: [relation_employeeid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "proc_emp_relation_ibfk_2")
+
+  @@index([relation_employeeid], map: "relation_employeeid")
+  @@index([relation_processid], map: "relation_processid")
+}
+
+model proc_prod_relation {
+  displayid          Int      @id @default(autoincrement())
+  relation_processid Int
+  relation_productid Int?
+  process            process  @relation(fields: [relation_processid], references: [process_id], onDelete: NoAction, onUpdate: NoAction, map: "proc_prod_relation_ibfk_1")
+  product            product? @relation(fields: [relation_productid], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "proc_prod_relation_ibfk_2")
+
+  @@index([relation_processid], map: "relation_processid")
+  @@index([relation_productid], map: "relation_productid")
+}
+
+model process {
+  process_id         Int                  @id
+  process_name       String?              @db.VarChar(255)
+  proc_emp_relation  proc_emp_relation[]
+  proc_prod_relation proc_prod_relation[]
+}
+
+model product {
+  product_id          Int                   @id
+  product_name        String?               @db.VarChar(255)
+  relation_mid        Int?
+  relation_vid        Int?
+  default_requirement default_requirement[]
+  orderproduct        orderproduct[]
+  proc_prod_relation  proc_prod_relation[]
+  material            material?             @relation(fields: [relation_mid], references: [material_id], onDelete: NoAction, onUpdate: NoAction, map: "product_ibfk_1")
+  variety             variety?              @relation(fields: [relation_vid], references: [variety_id], onDelete: NoAction, onUpdate: NoAction, map: "product_ibfk_2")
+  require_category    require_category[]
+
+  @@index([relation_mid], map: "relation_mid")
+  @@index([relation_vid], map: "relation_vid")
+}
+
+model require_category {
+  category_id         Int                   @id
+  relation_productid  Int?
+  category_name       String?               @db.VarChar(255)
+  default_requirement default_requirement[]
+  product             product?              @relation(fields: [relation_productid], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "require_category_ibfk_1")
+  requirement         requirement[]
+
+  @@index([relation_productid], map: "relation_productid")
+}
+
+model requirement {
+  displayid               Int               @id @default(autoincrement())
+  relation_orderproductid Int
+  relation_categoryid     Int?
+  require_text            String?           @db.VarChar(255)
+  orderproduct            orderproduct      @relation(fields: [relation_orderproductid], references: [orderproduct_id], onDelete: NoAction, onUpdate: NoAction, map: "requirement_ibfk_1")
+  require_category        require_category? @relation(fields: [relation_categoryid], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "requirement_ibfk_2")
+
+  @@index([relation_categoryid], map: "relation_categoryid")
+  @@index([relation_orderproductid], map: "relation_orderproductid")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model user {
+  uid                                          Int                   @id @default(autoincrement())
+  username                                     String?               @db.VarChar(255)
+  password                                     String?               @db.VarChar(255)
+  relation_characterid                         Int?
+  admin_info                                   admin_info[]
+  conversation_conversation_talk_user1idTouser conversation[]        @relation("conversation_talk_user1idTouser")
+  conversation_conversation_talk_user2idTouser conversation[]        @relation("conversation_talk_user2idTouser")
+  default_requirement                          default_requirement[]
+  doc_org_relation                             doc_org_relation[]
+  doctor_info                                  doctor_info[]
+  employee_info                                employee_info[]
+  message                                      message[]
+  order_order_petient_uidTouser                order[]               @relation("order_petient_uidTouser")
+  order_order_doctor_uidTouser                 order[]               @relation("order_doctor_uidTouser")
+  patient_info                                 patient_info[]
+  proc_emp_relation                            proc_emp_relation[]
+  character                                    character?            @relation(fields: [relation_characterid], references: [characterid], onDelete: NoAction, onUpdate: NoAction, map: "user_ibfk_1")
+
+  @@index([relation_characterid], map: "relation_characterid")
+}
+
+model usergroup {
+  groupid          Int             @id
+  groupname        String?         @db.VarChar(255)
+  groupdescription String?         @db.VarChar(255)
+  createtime       DateTime?       @db.DateTime(0)
+  parentgroupid    Int?
+  admin_info       admin_info[]
+  doctor_info      doctor_info[]
+  employee_info    employee_info[]
+  patient_info     patient_info[]
+  usergroup        usergroup?      @relation("usergroupTousergroup", fields: [parentgroupid], references: [groupid], onDelete: NoAction, onUpdate: NoAction, map: "usergroup_ibfk_1")
+  other_usergroup  usergroup[]     @relation("usergroupTousergroup")
+
+  @@index([parentgroupid], map: "parentgroupid")
+}
+
+model variety {
+  variety_id   Int       @id
+  variety_name String?   @db.VarChar(255)
+  product      product[]
+}
+
+model workorder {
+  workorder_id            Int           @id
+  workorder_number        String?       @db.VarChar(255)
+  relation_orderproductid Int?
+  orderproduct            orderproduct? @relation(fields: [relation_orderproductid], references: [orderproduct_id], onDelete: NoAction, onUpdate: NoAction, map: "workorder_ibfk_1")
+
+  @@index([relation_orderproductid], map: "relation_orderproductid")
+}
