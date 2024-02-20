@@ -1,32 +1,24 @@
-<script setup lang="ts">
-//import { useQuery } from "vue-query"; 
+<template>
+  <router-view />
+
+</template>
+
+<script lang="ts" setup>
+import {
+ Document,
+ Menu as IconMenu,
+ Location,
+} from '@element-plus/icons-vue'
 
 
-import { ref } from "vue";
-
-import { trpc } from "@common/api";
-
-const message = ref(`Please click to send tRPC call with token to the Nest.js server`);
-
-
-const hello = () => {
-  // trpc.hello.query({name: "AAA"}).then((res) => {
-  //   message.value = res.text;
-  // }).catch((err) => {
-  //   message.value = err;
-  // });
-  
-  
-}
-
-
+const date = new Date()
+   const dateStr = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+    
 </script>
 
-<template>
-<p class="tip">{{message}}</p>
-  <div class="actions">
-    <div class="action">
-      <a target="_blank" rel="noreferrer" @click="hello">Send Hello</a>
-    </div>
-  </div>
-</template>
+<style>
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+ width: 200px;
+ min-height: 400px;
+}
+</style>
