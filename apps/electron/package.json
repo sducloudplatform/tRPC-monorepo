@@ -24,7 +24,11 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
-    "electron-updater": "^6.1.7"
+    "electron-updater": "^6.1.7",
+    "element-plus": "^2.5.5",
+    "pinia": "^2.1.7",
+    "sass": "^1.71.0",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",
