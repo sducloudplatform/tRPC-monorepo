@@ -38,6 +38,7 @@
       [Lock.name]: Lock,
       ValidCode
     },
+    
   })
 </script>
 
@@ -48,14 +49,19 @@
   import ValidCode from "../components/ValidCode.vue";
   import {ref} from "vue"
   import { reactive } from 'vue';
+  import { getCurrentInstance} from 'vue'
+  import request from "../utils/request.js"
+  import { nextTick } from 'vue'
 
- const loginForm = ref({
+
+ 
+  const loginForm = ref({
       username: '',
       password: '',
       validCode: '',
     })
-
-const loginRules = reactive({
+ 
+  const loginRules = reactive({
   username: [
     {
       required: true,
@@ -75,44 +81,51 @@ const loginRules = reactive({
   ValidCode: ''
 })
 
-  const form=ref(null)
-  
-const  createdValidCode = (data:any) => {
+  const instance = getCurrentInstance()
+  const _this= instance.appContext.config.globalProperties
+  const  createdValidCode = (data:any) => {
    // 使用的时候记得 .value
-  this.validCode = data
+  _this.validCode = data
+};
+    const message = ref(0)
+    const changeMessage = async newMessage => {
+      message.value = newMessage
+      await nextTick()
+     
+
+    }
+
+   const login = async () => {
+  _this.$refs.form.validate((valid: any) => {
+  if (valid) {
+    if (!_this.loginForm.validCode) {
+      _this.$message.error("请填写验证码")
+      return
+    }
+    if(_this.loginForm.validCode.toLowerCase() !== _this.validCode.toLowerCase()) {
+      _this.$message.error("验证码错误")
+      return
+    }
+    request.post("/user/login", _this.loginForm).then(res => {
+      if (res.code === '0') {
+        _this.$message({
+          type: "success",
+          message: "登录成功"
+        })
+        sessionStorage.setItem("user", JSON.stringify(res.data))  // 缓存用户信息
+        _this.$router.push("/") 
+         //登录成功之后进行页面的跳转，跳转到主页
+
+      } else {
+        _this.$message({
+          type: "error",
+        })
+      }
+    })
+  }
+})
 };
 
-
-  const login = () => {
-   this.$refs['form'].validate((valid:any) => {
-        if (valid) {
-          if (!this.loginForm.validCode) {
-            this.$message.error("请填写验证码")
-            return
-          }
-          if(this.loginForm.validCode.toLowerCase() !== this.validCode.toLowerCase()) {
-            this.$message.error("验证码错误")
-            return
-          }
-          request.post("/user/login", this.form).then(res => {
-            if (res.code === '0') {
-              this.$message({
-                type: "success",
-                message: "登录成功"
-              })
-              sessionStorage.setItem("user", JSON.stringify(res.data))  // 缓存用户信息
-              this.$router.push("/") 
-            }
-              else {
-              this.$message({
-                type: "error",
-                message: res.msg
-              })
-            }
-          })
-        }
-      })
-};
 
 
 
