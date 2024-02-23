@@ -15,7 +15,7 @@ import { AppService } from './app.service';
 import { appRouter } from '.'
 import { UserRouter } from './router/user.router';
 import { UserModule } from './modules/user/user.module';
-import * as Joi from 'joi'
+// import { OssModule } from './modules/oss/oss.module';
 
 // import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
@@ -46,6 +46,7 @@ import { RedisModule } from './commom/db/redis.module';
         JwtModule,
 
         RedisModule,
+        // OssModule,
      
         //如果未能提供所需的环境变量或者不符合某些验证规则，则在启动期间抛出异常
         // ConfigModule.forRoot({

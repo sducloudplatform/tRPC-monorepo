@@ -58,11 +58,7 @@ export const UserRouter = router({
         refreshToken:procedure.query(async (opts)=>{
             const refreshToken=await opts.ctx.inject(UserController)
             
-<<<<<<< HEAD
             return await refreshToken.refreshToken1(
-=======
-            return await refreshToken.refreshToken(
->>>>>>> 834b01fd14c1c358e74c3bc31406d14871b63d8d
                 opts.ctx.req.body.REQUEST_USER_KEY.username,
                 opts.ctx.req.body.REQUEST_USER_KEY.iat
                 )
