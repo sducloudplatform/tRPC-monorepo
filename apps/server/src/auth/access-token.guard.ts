@@ -4,11 +4,7 @@ import { ConfigType } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { Request, response } from 'express'
 import { Reflector } from '@nestjs/core'
-<<<<<<< HEAD
 import { REQUEST_USER_KEY,refreshTokenUrl } from '@server/commom/constants/index'
-=======
-import { REQUEST_USER_KEY } from '@server/commom/constants/index'
->>>>>>> 834b01fd14c1c358e74c3bc31406d14871b63d8d
 import jwtConfig from '@server/commom/config/jwt.config'
 import { IS_PUBLIC_KEY } from '@server/commom/decorators/public.decorator'
 import { RedisService } from '@server/commom/db/redis.service'
@@ -16,10 +12,7 @@ import { JsonObject } from '@prisma/client/runtime/library'
 import { timeStamp } from 'console'
 import { ActiveUserData } from './ActiveUserData'
 import redisConfig from '@server/commom/config/redis.config'
-<<<<<<< HEAD
 import {passValidUrlList} from '@server/commom/constants/index'
-=======
->>>>>>> 834b01fd14c1c358e74c3bc31406d14871b63d8d
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -37,7 +30,6 @@ export class AccessTokenGuard implements CanActivate {
     
 
     //带有public注解的，如登录、注册无需经过守卫
-<<<<<<< HEAD
     // const isPublic = this.reflector.get(IS_PUBLIC_KEY, context.getHandler())
     // if (isPublic)
     // {console.log(111)
@@ -159,82 +151,6 @@ export class AccessTokenGuard implements CanActivate {
 
    }
     
-=======
-    const isPublic = this.reflector.get(IS_PUBLIC_KEY, context.getHandler())
-    if (isPublic)
-    {console.log(111)
-     return true
-    }
-      
-    const request = context.switchToHttp().getRequest()
-   
-
-    let token=request.get('Authorization')
-    if(token.indexOf('Bearer')>=0){
-      token=token.replace('Bearer ','')
-    }
-    console.log(token)
-    // const token = this.extractTokenFromHeader(request)
-
-    if (!token)
-      {
-      throw new UnauthorizedException("请登录！")
-    }
-    console.log(this.jwtConfiguration.secret)
-    // try {
-      // this.jwtService.verify(token,this.jwtConfiguration)
-      // const payload = this.jwtService.verifyAsync(token, this.jwtConfiguration)
-      const payload =this.jwtService.verify(token,this.jwtConfiguration)
-      
-      console.log(payload)
-
-      //13位时间
-      // const time=Date.parse(new Date().toDateString())
-
-      //10位时间
-      const nowTime=parseInt(Math.round(new Date().getTime()/1000).toString());
-      console.log("currentTime:"+nowTime)
-      console.log("token过期时间"+payload.ts)
-
-      //请求中携带的token已过期
-      if(nowTime>payload.ts){
-          
-         const redisToken=(await this.redisService.get(`tokenOf${payload.sub}`))
-         //redis中存的token和请求中携带的是同一个token，则重新签发
-         console.log("redisToken:"+redisToken)
-         console.log("token:"+token)
-         if(!redisToken){
-          throw new UnauthorizedException("重新登录")
-         }
-         else if(redisToken==token ){
-            //重新签发token
-            console.log(666)
-            const newToken= await this.signToken<Partial<ActiveUserData>>(
-              payload.sub, { username: payload.username,userCharacter:payload.userCharacter,ts:nowTime})
-             
-              await this.redisService.set(`tokenOf${payload.sub}`,newToken,this.reidsConfiguration.ttl)
-          
-            }
-         //拿老token发送请求
-         else
-         {
-          
-          throw new UnauthorizedException("用户身份过期")
-         }
-      }
-      else{
-        return true
-      }
-
-      request[REQUEST_USER_KEY] = payload
-      
-
-    // }
-    // catch (error) {
-  
-    //   throw new UnauthorizedException("请登录..")
-    // }
->>>>>>> 834b01fd14c1c358e74c3bc31406d14871b63d8d
   
     return true
   }
