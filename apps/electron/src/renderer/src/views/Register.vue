@@ -52,6 +52,7 @@
   import { getCurrentInstance} from 'vue'
   import request from "../utils/request.js"
 
+  const form = ref(null)
   const instance = getCurrentInstance()
   const _this= instance.appContext.config.globalProperties
   const loginForm = ref({
@@ -81,13 +82,20 @@
 })
 
 const  getRadioVal = (data:any) => {
-  console.log(_this.loginForm.relation_characterid);
+  console.log(loginForm.value.relation_characterid);
 };
 const register = async () => {
 
-  _this.$refs['form'].validate((valid) => {
+if (loginForm.value.password !== loginForm.value.confirm) {
+        _this.$message({
+          type: "error",
+          message: '2次密码输入不一致！'
+        })
+        return
+      }
+  form.value.validate((valid) => {
         if (valid) {
-          request.post("/user/register", _this.loginForm).then(res => {
+          request.post("/user/register", loginForm).then(res => {
             if (res.code === '0') {
               _this.$message({
                 type: "success",
@@ -105,14 +113,7 @@ const register = async () => {
 
         }
       })
-
-      if (_this.form.password !== _this.form.confirm) {
-        _this.$message({
-          type: "error",
-          message: '2次密码输入不一致！'
-        })
-        return
-      }
+      
 
 };
  

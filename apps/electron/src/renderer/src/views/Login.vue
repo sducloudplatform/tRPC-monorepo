@@ -32,6 +32,7 @@
 
 <script lang="ts">
  export default defineComponent({
+  name:'login',
     components: {
       [User.name]: User,
       [Key.name]: Key,
@@ -54,7 +55,7 @@
   import { nextTick } from 'vue'
 
 
- 
+  const form = ref(null)
   const loginForm = ref({
       username: '',
       password: '',
@@ -83,30 +84,25 @@
 
   const instance = getCurrentInstance()
   const _this= instance.appContext.config.globalProperties
+
   const  createdValidCode = (data:any) => {
    // 使用的时候记得 .value
-  _this.validCode = data
+  ValidCode.value = data
 };
-    const message = ref(0)
-    const changeMessage = async newMessage => {
-      message.value = newMessage
-      await nextTick()
-     
-
-    }
-
+ 
    const login = async () => {
-  _this.$refs.form.validate((valid: any) => {
+    
+   form.value.validate((valid: any) => {
   if (valid) {
-    if (!_this.loginForm.validCode) {
+    if (!loginForm.value.validCode) {
       _this.$message.error("请填写验证码")
       return
     }
-    if(_this.loginForm.validCode.toLowerCase() !== _this.validCode.toLowerCase()) {
+    if(loginForm.value.validCode.toLowerCase() !== ValidCode.value.toLowerCase()) {
       _this.$message.error("验证码错误")
       return
     }
-    request.post("/user/login", _this.loginForm).then(res => {
+    request.post("/user/login", loginForm).then(res => {
       if (res.code === '0') {
         _this.$message({
           type: "success",
