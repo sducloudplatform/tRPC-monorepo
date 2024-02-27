@@ -35,7 +35,20 @@
 			"style": {
 				"navigationBarTitleText": "新建订单"
 			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/login/login2",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
 		}
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

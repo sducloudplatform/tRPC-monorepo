@@ -16,6 +16,7 @@
     "types": [
       "@dcloudio/types",
       "@uni-helper/uni-ui-types",
+      "miniprogram-api-typings",
     ]
   },
   "include": [
