@@ -37,13 +37,19 @@
 			}
 		},
 		{
-			"path": "pages/login/login",
+			"path": "pages/login/login_wx",
 			"style": {
 				"navigationBarTitleText": "登录"
 			}
 		},
 		{
-			"path": "pages/login/login2",
+			"path": "pages/login/login_password",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/login/login_phone",
 			"style": {
 				"navigationBarTitleText": "登录"
 			}

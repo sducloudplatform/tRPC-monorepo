@@ -4,11 +4,13 @@ import { ref } from 'vue'
 
 // #ifdef MP-WEIXIN
 // 获取 code 登录凭证
-// let code = ''
-// onLoad(async () => {
-//   const res = await wx.login()
-//   code = res.code
-// })
+let code = ''
+onLoad(async () => {
+  const res = await wx.login()
+  code = res.code
+})
+
+// test
 
 // // 获取用户手机号码
 // const onGetphonenumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
@@ -64,7 +66,7 @@ import { ref } from 'vue'
       <!-- #ifdef MP-WEIXIN -->
       <button class="button phone" open-type="getPhoneNumber">
         <text class="icon icon-phone"></text>
-        账号密码登录
+        手机号快捷登录
       </button>
       <!-- #endif -->
       <view class="extra">
@@ -74,7 +76,7 @@ import { ref } from 'vue'
         <view class="options">
           <!-- 通用模拟登录 -->
           <button >
-            <text class="icon icon-phone">手机号快捷登录</text>
+            <text class="icon icon-phone">账号密码登录</text>
           </button>
         </view>
       </view>

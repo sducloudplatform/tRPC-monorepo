@@ -4,11 +4,11 @@ import { ref } from 'vue'
 
 // #ifdef MP-WEIXIN
 // 获取 code 登录凭证
-let code = ''
-onLoad(async () => {
-  const res = await wx.login()
-  code = res.code
-})
+// let code = ''
+// onLoad(async () => {
+//   const res = await wx.login()
+//   code = res.code
+// })
 
 // // 获取用户手机号码
 // const onGetphonenumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
@@ -62,10 +62,18 @@ onLoad(async () => {
     <view class="login">
       <!-- 小程序端授权登录 -->
       <!-- #ifdef MP-WEIXIN -->
-      <button class="button phone" open-type="getPhoneNumber">
+      <!-- <button class="button phone" open-type="getPhoneNumber">
         <text class="icon icon-phone"></text>
-        手机号快捷登录
-      </button>
+        账号密码登录
+      </button> -->
+      <form
+        @submit=""
+        @reset=""
+      >
+        
+        <button form-type="submit">提交</button>
+        <button form-type="reset">重置</button>
+      </form>
       <!-- #endif -->
       <view class="extra">
         <view class="caption">
@@ -74,7 +82,7 @@ onLoad(async () => {
         <view class="options">
           <!-- 通用模拟登录 -->
           <button >
-            <text class="icon icon-phone">账号密码登录</text>
+            <text class="icon icon-phone">手机号快捷登录</text>
           </button>
         </view>
       </view>
