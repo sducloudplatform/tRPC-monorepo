@@ -35,7 +35,26 @@
 			"style": {
 				"navigationBarTitleText": "新建订单"
 			}
+		},
+		{
+			"path": "pages/login/login_wx",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/login/login_password",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/login/login_phone",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
 		}
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
