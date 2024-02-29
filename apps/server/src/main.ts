@@ -8,7 +8,9 @@ import jwtConfig from './commom/config/jwt.config';
 const listenPost = 3000;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule,{
+    cors: true
+  });
  
   
   console.log(`listen in http://localhost:${listenPost}`)
