@@ -246,6 +246,7 @@ model requirement {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model user {
   uid                                          Int                   @id @default(autoincrement())
+  phone                                        String?               @db.VarChar(255)
   username                                     String?               @db.VarChar(255)
   password                                     String?               @db.VarChar(255)
   relation_characterid                         Int?
