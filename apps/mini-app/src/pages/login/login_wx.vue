@@ -12,6 +12,10 @@ onLoad(async () => {
 
 // test
 
+const onlogin_password = () =>{
+  uni.redirectTo({url:'./login_password'})
+}
+
 // // 获取用户手机号码
 // const onGetphonenumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
 //   const { encryptedData, iv } = ev.detail
@@ -75,7 +79,7 @@ onLoad(async () => {
         </view>
         <view class="options">
           <!-- 通用模拟登录 -->
-          <button >
+          <button @tap="onlogin_password()">
             <text class="icon icon-phone">账号密码登录</text>
           </button>
         </view>

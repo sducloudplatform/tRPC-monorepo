@@ -10,6 +10,15 @@ import { ref } from 'vue'
 //   code = res.code
 // })
 
+// const onLogin_wx = async () => {
+//   uni.navigateTo({url:'pages/login/login_wx'})
+// }
+
+const onlogin_wx = () =>{
+  uni.redirectTo({url:'./login_wx'})
+}
+
+
 // // 获取用户手机号码
 // const onGetphonenumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
 //   const { encryptedData, iv } = ev.detail
@@ -78,11 +87,11 @@ import { ref } from 'vue'
         </view>
         <view class="options">
           <!-- 通用模拟登录 -->
-          <navigator url="pages/login/login_wx.vue" hover-class="navigator-hover">
-            <button >
+          <!-- <navigator url="pages/login/login_wx" open-type="navigate" hover-class="navigator-hover"> -->
+          <button @tap="onlogin_wx()">
             <text class="icon icon-phone">微信快捷登录</text>
           </button>
-				</navigator>
+				<!-- </navigator> -->
         </view>
       </view>
       <view class="tips">登录/注册即视为你同意《服务条款》</view>
