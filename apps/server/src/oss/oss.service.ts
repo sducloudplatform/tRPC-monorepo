@@ -9,8 +9,8 @@ export class OssService {
     async getSignature() {
         const config = {
             // OSS credentials
-            accessKeyId: 'LTAI5t8sLiZzo942RKZiKJgE',
-            accessKeySecret: 'lwK5RXB4mf9vvlG3f9fJRsqwyetrO7',
+            accessKeyId: process.env.OSS_ACCESS_KEY_ID as string,
+            accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET as string,
             // bucket name
             bucket: 'oss4zhimei',
             // dir
@@ -22,7 +22,7 @@ export class OssService {
         date.setDate(date.getDate() + 1)
 
         const policy = {
-            expiration: date.toISOString,
+            expiration: date.toISOString(),
             conditions: [
                 ['content-length-range', 0, 1048576000] // 1000M
             ]
