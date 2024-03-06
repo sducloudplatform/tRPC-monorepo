@@ -13,8 +13,8 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
   <scroll-view enable-back-to-top @scrolltolower="onScrolltolower" class="viewport" scroll-y>
     <!-- 个人资料 -->
     <view class="profile" :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
-      <view class="overview" >
-        <navigator url="/pagesMember/profile/profile" hover-class="none">
+      <view class="overview">
+        <navigator url="/pages/user/profiles" hover-class="none" hover-stop-propagation="true">
           <image class="avatar" src="../../static/OIP-C.jpg" mode="aspectFill"></image>
         </navigator>
         <view class="meta">
@@ -22,7 +22,7 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
             hahah
             <!-- {{ memberStore.profile.nickname || memberStore.profile.account }} -->
           </view>
-          <navigator class="extra" url="/pagesMember/profile/profile" hover-class="none">
+          <navigator class="extra" url="/pages/user/profiles" hover-class="none" hover-stop-propagation="true">
             <text class="update">更新头像昵称</text>
           </navigator>
         </view>
@@ -133,7 +133,7 @@ page {
   }
 }
 
-/* 我的订单 */
+
 .orders {
   position: relative;
   z-index: 99;
