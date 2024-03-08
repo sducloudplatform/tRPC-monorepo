@@ -34,7 +34,7 @@ Authorization:Bearer xxxx-xxxx-xxxx-xxxx
 POST http://localhost:3000/user/signIn
 ```
 
-- 请求参数
+- 请求参数（body）
 
 | 参数     | 必选 | 类型   | 说明 |
 | -------- | ---- | ------ | ---- |
@@ -55,7 +55,7 @@ POST http://localhost:3000/user/signIn
 POST http://localhost:3000/user/signUp
 ```
 
-- 请求参数
+- 请求参数（body）
 
 | 参数     | 必选 | 类型   | 说明 |
 | -------- | ---- | ------ | ---- |
@@ -87,4 +87,24 @@ GET http://localhost:3000/user/refreshToken
 Authorization:Bearer xxxx-xxxx-xxxx-xxxx
 
 ```
+
+### 1.4获取验证码
+
+- URL
+
+```
+POST http://localhost:3000/user/getVerifyCode
+```
+
+- 请求参数（Params）
+
+| 参数  | 必选 | 类型   | 说明 |
+| ----- | ---- | ------ | ---- |
+| phone |      | string |      |
+
+- 返回字段
+
+| 返回字段         | 类型   | 说明      |
+| ---------------- | ------ | --------- |
+| verificationCode | number | 4位验证码 |
 

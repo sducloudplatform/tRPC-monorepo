@@ -38,9 +38,13 @@ export class AccessTokenGuard implements CanActivate {
       
     const req= context.switchToHttp().getRequest()
    
-    const url=req.url
+    let url=req.url
     console.log(url)
-
+    if(url.indexOf('?')>=0){
+      url=url.slice(0,url.indexOf('?'))
+      console.log(222222)
+    }
+    console.log(url)
     //路由白名单
     if(passValidUrlList.includes(url))
     {

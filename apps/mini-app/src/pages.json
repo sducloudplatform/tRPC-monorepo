@@ -53,8 +53,17 @@
 			"style": {
 				"navigationBarTitleText": "登录"
 			}
+		},
+		{
+		
+				
+			"path": "pages/user/profiles",
+			"style": {
+				"navigationBarTitleText": "个人信息"
 		}
-
+				
+			
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
@@ -70,7 +79,7 @@
 			{
 				"pagePath": "pages/index/index",
 				"text": "首页",
- 				"iconPath": "static/tabbar/index/list-bullets.png",
+				"iconPath": "static/tabbar/index/list-bullets.png",
 				"selectedIconPath": "static/tabbar/index/list-bullets-active.png"
 			},
 			{
@@ -84,14 +93,14 @@
 				"text": "新建订单",
 				"iconPath": "static/tabbar/create/plus-circle.png",
 				"selectedIconPath": "static/tabbar/create/plus-circle-active.png"
-			},	
+			},
 			{
 				"pagePath": "pages/messages/messages",
 				"text": "消息",
 				"iconPath": "static/tabbar/messages/chats.png",
 				"selectedIconPath": "static/tabbar/messages/chats-active.png"
 			},
-					{
+			{
 				"pagePath": "pages/user/user",
 				"text": "我的",
 				"iconPath": "static/tabbar/user/user.png",
@@ -99,4 +108,5 @@
 			}
 		]
 	}
+	
 }

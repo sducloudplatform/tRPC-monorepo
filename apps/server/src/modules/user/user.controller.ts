@@ -1,4 +1,4 @@
-import { Body, Controller, Get, UseGuards, Request, Query } from '@nestjs/common';
+import { Body, Controller, Get, UseGuards, Request, Query, Param} from '@nestjs/common';
 
 import { Post } from '@nestjs/common';
 
@@ -13,8 +13,8 @@ import { UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FindUserDto } from './dto/find-user.dto';
 // import { Prisma,user } from '@prisma/client';
-// import {user} from '@prisma/client';
-import { user } from '@prisma/client'
+
+import {user} from '@prisma/client'
 import { ActiveUserData } from '@server/auth/ActiveUserData';
 import { SignUpDto } from './dto/sign-up.dto';
 import { AccessTokenGuard } from '@server/auth/access-token.guard';
@@ -24,36 +24,43 @@ import { OPTIONAL_DEPS_METADATA } from '@nestjs/common/constants';
 import { options } from 'joi';
 import { ContextCreator } from '@nestjs/core/helpers/context-creator';
 import { validUserDto } from './dto/vaild-user.dto';
-
+import { VerificationCodeService } from './verificationcode/verificationcode.service';
+import {WXSignInDto} from './dto/wxSignin.dto'
+import {HttpService} from '@nestjs/axios'
+import {AxiosResponse} from 'axios'
+import { map } from 'rxjs/operators';
+// import {WXBizDataCrypt} from 'apps\server\src\utils\WXBizDataCrypt'
 
 @Controller('user')
 export class UserController {
   constructor(
 
     private readonly jwtService: JwtService,
-    // private readonly hashingService:HashingService,
-    private readonly userService: UserService,
-
-    private redisService: RedisService,
+    private readonly httpService:HttpService,
+    private readonly userService:UserService,
+    private readonly verificationCodeService:VerificationCodeService,
+  
+ 
+    private redisService:RedisService,
 
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
 
     @Inject(redisConfig.KEY)
     private readonly reidsConfiguration: ConfigType<typeof redisConfig>,
-  ) { }
+  ) {}
+    
+    //
+    @Get('hello')
+    async hello(){
+      console.log(111)
+      return {string:'hello'}
+    }
 
-  //注册
-  @Get('hello')
-  async hello() {
-    console.log(111)
-    return { string: 'hello' }
-  }
 
-
-
-  @Post('signUp')
-  async signUp(@Body() signUpDto: SignUpDto) {
+    //注册
+    @Post('signUp')
+    async signUp(@Body() signUpDto:SignUpDto) {
     // TODO sign up
     // async createUser(data: Prisma.userCreateInput): Promise<user> {
     //     return this.prisma.user.create({
@@ -86,9 +93,12 @@ export class UserController {
     return this.userService.Create(createUserDto)
 
   }
+  
+    
   //登录
-  @Post('signIn')
-  async signIn(@Body() findUserDto: FindUserDto) {
+
+    @Post('signIn')
+    async signIn(@Body() findUserDto:FindUserDto) {
     const { username, password } = findUserDto
 
     const user = await this.userService.FindOneByUsername(username)
@@ -99,24 +109,85 @@ export class UserController {
     if (password != user.password)
       throw new UnauthorizedException('Password is incorrect')
 
-    return await this.generateTokens(user, this.reidsConfiguration.ttl)
-  }
+    return await this.generateTokens(user,this.reidsConfiguration.ttl)
+    }
 
-  @Get('refreshToken')
-  async refreshToken(@Body() body: validUserDto) {
+    @Post('wxSignIn')
+    async wxSignIn(@Body() wxSignInDto:WXSignInDto){
+     
+        const appid=process.env['APPID'];
+        const appsecret=process.env['APPSECRET']
+        const granttype='wx_authorization'
 
-
-    const username = body.username;
-    const iat = body.iat;
-
-    return await this.refreshToken1(username, iat)
-
-
-
-  }
+        const{code,iv,encryptedData}=wxSignInDto;
 
 
-  async refreshToken1(username: string, tokenCreatTime: number) {
+        const url = `https://api.weixin.qq.com/sns/jscode2session?
+        grant_type=${granttype}
+        &appid=${appid}
+        &secret=${appsecret}
+        &js_code=${code}`
+
+        
+
+        const info =await this.getInfoFromWxServer(url);
+
+        //info：
+        // {
+        //   "openid":"xxxxxx",
+        //   "session_key":"xxxxx",
+        //   "unionid":"xxxxx",
+        //   "errcode":0,
+        //   "errmsg":"xxxxx"
+        //   }
+
+        //session_key以及小程序端传过来的iv和encryptedData去解密即可得到手机号码。
+        
+        //解密
+        // const decode=new WXBizDataCrypt(appid,info.data?.session_key)
+        // const decode_data=decode.decryptData(encryptedData,iv)
+        
+
+
+    }
+
+
+
+
+    @Get('refreshToken')
+    async refreshToken(@Body() body:validUserDto){
+      
+      
+      const username=body.username;
+      const iat=body.iat;
+    
+      return await this.refreshToken1(username,iat)}
+
+
+
+
+    @Post('getVerifyCode')
+    async getVerifyCode(@Query('phone') phone:string ){
+        console.log(phone)
+        const toResult=await this.verificationCodeService.sendVerificationCode(phone);
+        console.log(toResult)
+        console.log(toResult.verificationCode)
+        if(toResult.isOk){
+          console.log(111111111111)
+          console.log(phone)
+          await this.redisService.set(`${phone}`,toResult.verificationCode,180000)
+          
+          const verificationCode=toResult.verificationCode;
+          return {verificationCode}
+       
+        }
+
+
+        
+    }
+
+
+  async refreshToken1(username:string,tokenCreatTime:number){
     //  const user=this.userService.FindOneByUsername(username)
 
 
@@ -176,4 +247,25 @@ export class UserController {
 
     )
   }
+
+  private getInfoFromWxServer(url:string):Promise<AxiosResponse>{
+    
+    return this.httpService.post(url).pipe(map(response => response)).toPromise() as Promise<AxiosResponse>
+
+
+
+  }
+
+  // decryptData(encryptedData: string, iv: string, sessionKey: string): Promise<any> {
+  //   const crypto=require('crypto');
+  //   const encryptedDataNew = Buffer.from(encryptedData, 'base64');
+  //   const keyNew = Buffer.from(sessionKey, 'base64');
+  //   const ivNew = Buffer.from(iv, 'base64');
+
+  //   const decipher = crypto.createDecipheriv('aes-128-cbc', keyNew, ivNew);
+  //   let decrypted = decipher.update(encryptedDataNew, 'binary', 'utf8');
+  //   decrypted += decipher.final('utf8');
+
+  //   return JSON.parse(decrypted);
+  // }
 }

@@ -15,7 +15,7 @@ import { AppService } from './app.service';
 import { appRouter } from '.'
 import { UserRouter } from './router/user.router';
 import { UserModule } from './modules/user/user.module';
-import * as Joi from 'joi'
+// import { OssModule } from './modules/oss/oss.module';
 
 // import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
@@ -28,6 +28,7 @@ import { AppController } from './app.controller';
 import redisConfig from './commom/config/redis.config';
 import { RedisModule } from './commom/db/redis.module';
 import { OssModule } from './oss/oss.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
     imports: [
@@ -47,8 +48,11 @@ import { OssModule } from './oss/oss.module';
         JwtModule,
 
         RedisModule,
+        // OssModule,
 
         OssModule,
+
+        OrderModule
      
         //如果未能提供所需的环境变量或者不符合某些验证规则，则在启动期间抛出异常
         // ConfigModule.forRoot({
@@ -65,10 +69,10 @@ import { OssModule } from './oss/oss.module';
         // })
     ],
     providers: [AppService,
-        {
-            provide: APP_GUARD,
-            useClass: AccessTokenGuard,
-          },
+        // {
+        //     provide: APP_GUARD,
+        //     useClass: AccessTokenGuard,
+        //   },
     ],
     controllers: [AppController]
 })
