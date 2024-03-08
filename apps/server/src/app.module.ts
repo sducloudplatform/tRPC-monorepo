@@ -27,6 +27,7 @@ import jwtConfig from './commom/config/jwt.config';
 import { AppController } from './app.controller';
 import redisConfig from './commom/config/redis.config';
 import { RedisModule } from './commom/db/redis.module';
+import { OssModule } from './oss/oss.module';
 
 @Module({
     imports: [
@@ -47,6 +48,8 @@ import { RedisModule } from './commom/db/redis.module';
 
         RedisModule,
         // OssModule,
+
+        OssModule,
      
         //如果未能提供所需的环境变量或者不符合某些验证规则，则在启动期间抛出异常
         // ConfigModule.forRoot({

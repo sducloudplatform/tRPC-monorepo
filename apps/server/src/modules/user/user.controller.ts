@@ -67,26 +67,26 @@ export class UserController {
     //       data,
     //     });
     //   }
-    
+
     //查看此用户名是否已经使用
-    const username =signUpDto.username;
-    const existUser= await this.userService.FindOneByUsername(username)
+    const username = signUpDto.username;
+    const existUser = await this.userService.FindOneByUsername(username)
     console.log(existUser)
-    if(existUser)
-        throw new UnauthorizedException('User already exists')
+    if (existUser)
+      throw new UnauthorizedException('User already exists')
     // const existUser = await this.prisma.user.findUnique({
     //     where: {
     //       uid:uid
     //     },
     //   })
-   
-    const createUserDto={
-        username:username,
-        password:signUpDto.password,
-  
+
+    const createUserDto = {
+      username: username,
+      password: signUpDto.password,
+
     }
-        
-    
+
+
     // const hashPassword=await this.hashingService.hash(data.password)
     // data.password=hashPassword;
 
@@ -106,7 +106,7 @@ export class UserController {
       throw new UnauthorizedException('User not found')
 
     // const isEqual = await this.hashingService.compare(password, user.password)
-    if (password!=user.password)
+    if (password != user.password)
       throw new UnauthorizedException('Password is incorrect')
 
     return await this.generateTokens(user,this.reidsConfiguration.ttl)
@@ -165,8 +165,11 @@ export class UserController {
       return await this.refreshToken1(username,iat)
 
 
+    const username = body.username;
+    const iat = body.iat;
 
-    }
+    return await this.refreshToken1(username, iat)
+
 
     @Post('getVerifyCode')
     async getVerifyCode(@Query('phone') phone:string ){
@@ -191,7 +194,7 @@ export class UserController {
 
   async refreshToken1(username:string,tokenCreatTime:number){
     //  const user=this.userService.FindOneByUsername(username)
-     
+
 
     //  return await this.generateTokens(user,tokenCreatTime)
     const user = await this.userService.FindOneByUsername(username)
@@ -199,34 +202,35 @@ export class UserController {
       throw new UnauthorizedException('User not found')
 
     // const isEqual = await this.hashingService.compare(password, user.password)
-  
-    const nowTime=parseInt(Math.round(new Date().getTime()/1000).toString());
-    
+
+    const nowTime = parseInt(Math.round(new Date().getTime() / 1000).toString());
+
     console.log(nowTime)
     console.log(tokenCreatTime)
-    const ttl=24*60*60*1000-((nowTime-tokenCreatTime)*1000)
+    const ttl = 24 * 60 * 60 * 1000 - ((nowTime - tokenCreatTime) * 1000)
 
     console.log(ttl)
-    return await this.generateTokens(user,ttl)
+    return await this.generateTokens(user, ttl)
 
   }
 
-  async generateTokens(user: user,redisTTL:number) {
+  async generateTokens(user: user, redisTTL: number) {
     const token = await this.signToken<Partial<ActiveUserData>>(
-      user.uid, { 
-        username: user.username||'',
-        userCharacter:user.relation_characterid||undefined,
-        ts:parseInt(Math.round(new Date().getTime()/1000).toString()) 
-        +parseInt(process.env.JWT_ACCESS_TOKEN_TTL||'')
-      }
+      user.uid, {
+      username: user.username || '',
+      userCharacter: user.relation_characterid || undefined,
+      ts: parseInt(Math.round(new Date().getTime() / 1000).toString())
+        + parseInt(process.env.JWT_ACCESS_TOKEN_TTL || '')
+    }
 
-      )
+    )
     await this.redisService.set(`tokenOf${user.uid}`,
-    token,redisTTL)
- 
-    return { token
-       ,type:'Bearer'
- }
+      token, redisTTL)
+
+    return {
+      token
+      , type: 'Bearer'
+    }
   }
 
   private async signToken<T>(userId: number, payload?: T) {
@@ -235,8 +239,8 @@ export class UserController {
         sub: userId,
 
         ...payload,
-   
-        
+
+
       },
       {
 
@@ -245,7 +249,7 @@ export class UserController {
         issuer: this.jwtConfiguration.issuer,
         // expiresIn: this.jwtConfiguration.accessTokenTtl
       },
-    
+
     )
   }
 
