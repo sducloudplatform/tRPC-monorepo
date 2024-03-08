@@ -1,4 +1,4 @@
-import { Body, Controller, Get, UseGuards, Request, Query} from '@nestjs/common';
+import { Body, Controller, Get, UseGuards, Request, Query, Param} from '@nestjs/common';
 
 import { Post } from '@nestjs/common';
 
@@ -24,14 +24,22 @@ import { OPTIONAL_DEPS_METADATA } from '@nestjs/common/constants';
 import { options } from 'joi';
 import { ContextCreator } from '@nestjs/core/helpers/context-creator';
 import { validUserDto } from './dto/vaild-user.dto';
+import { VerificationCodeService } from './verificationcode/verificationcode.service';
+import {WXSignInDto} from './dto/wxSignin.dto'
+import {HttpService} from '@nestjs/axios'
+import {AxiosResponse} from 'axios'
+import { map } from 'rxjs/operators';
+// import {WXBizDataCrypt} from 'apps\server\src\utils\WXBizDataCrypt'
 
 @Controller('user')
 export class UserController {
   constructor(
 
     private readonly jwtService: JwtService,
-    // private readonly hashingService:HashingService,
+    private readonly httpService:HttpService,
     private readonly userService:UserService,
+    private readonly verificationCodeService:VerificationCodeService,
+  
  
     private redisService:RedisService,
 
@@ -42,7 +50,7 @@ export class UserController {
     private readonly reidsConfiguration: ConfigType<typeof redisConfig>,
   ) {}
     
-    //注册
+    //
     @Get('hello')
     async hello(){
       console.log(111)
@@ -50,7 +58,7 @@ export class UserController {
     }
 
 
-
+    //注册
     @Post('signUp')
     async signUp(@Body() signUpDto:SignUpDto) {
     // TODO sign up
@@ -85,6 +93,8 @@ export class UserController {
     return this.userService.Create(createUserDto)
 
   }
+  
+    
   //登录
 
     @Post('signIn')
@@ -102,6 +112,49 @@ export class UserController {
     return await this.generateTokens(user,this.reidsConfiguration.ttl)
     }
 
+    @Post('wxSignIn')
+    async wxSignIn(@Body() wxSignInDto:WXSignInDto){
+        //appid:wx2a85e3b6ce370356
+        //appsecret:c896d09ff7539510c57051eac3b83acd
+        const appid='wx2a85e3b6ce370356'
+        const appsecret='c896d09ff7539510c57051eac3b83acd'
+        const granttype='wx_authorization'
+
+        const{code,iv,encryptedData}=wxSignInDto;
+
+
+        const url = `https://api.weixin.qq.com/sns/jscode2session?
+        grant_type=${granttype}
+        &appid=${appid}
+        &secret=${appsecret}
+        &js_code=${code}`
+
+        
+
+        const info =await this.getInfoFromWxServer(url);
+
+        //info：
+        // {
+        //   "openid":"xxxxxx",
+        //   "session_key":"xxxxx",
+        //   "unionid":"xxxxx",
+        //   "errcode":0,
+        //   "errmsg":"xxxxx"
+        //   }
+
+        //session_key以及小程序端传过来的iv和encryptedData去解密即可得到手机号码。
+        
+        //解密
+        // const decode=new WXBizDataCrypt(appid,info.data?.session_key)
+        // const decode_data=decode.decryptData(encryptedData,iv)
+        
+
+
+    }
+
+
+
+
     @Get('refreshToken')
     async refreshToken(@Body() body:validUserDto){
       
@@ -113,6 +166,26 @@ export class UserController {
 
 
 
+    }
+
+    @Post('getVerifyCode')
+    async getVerifyCode(@Query('phone') phone:string ){
+        console.log(phone)
+        const toResult=await this.verificationCodeService.sendVerificationCode(phone);
+        console.log(toResult)
+        console.log(toResult.verificationCode)
+        if(toResult.isOk){
+          console.log(111111111111)
+          console.log(phone)
+          await this.redisService.set(`${phone}`,toResult.verificationCode,180000)
+          
+          const verificationCode=toResult.verificationCode;
+          return {verificationCode}
+       
+        }
+
+
+        
     }
 
 
@@ -175,4 +248,25 @@ export class UserController {
     
     )
   }
+
+  private getInfoFromWxServer(url:string):Promise<AxiosResponse>{
+    
+    return this.httpService.post(url).pipe(map(response => response)).toPromise() as Promise<AxiosResponse>
+
+
+
+  }
+
+  // decryptData(encryptedData: string, iv: string, sessionKey: string): Promise<any> {
+  //   const crypto=require('crypto');
+  //   const encryptedDataNew = Buffer.from(encryptedData, 'base64');
+  //   const keyNew = Buffer.from(sessionKey, 'base64');
+  //   const ivNew = Buffer.from(iv, 'base64');
+
+  //   const decipher = crypto.createDecipheriv('aes-128-cbc', keyNew, ivNew);
+  //   let decrypted = decipher.update(encryptedDataNew, 'binary', 'utf8');
+  //   decrypted += decipher.final('utf8');
+
+  //   return JSON.parse(decrypted);
+  // }
 }

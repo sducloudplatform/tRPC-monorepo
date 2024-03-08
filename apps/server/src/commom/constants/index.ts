@@ -14,7 +14,8 @@ export const trpcRefreshTokenUrl = '/user.refreshToken'
 export const passValidUrlList = [
 
   '/user/signIn',
-  '/user/signUp'
+  '/user/signUp',
+  '/user/getVerifyCode'
 
 ]
 export const refreshTokenUrl = '/user/refreshToken'
