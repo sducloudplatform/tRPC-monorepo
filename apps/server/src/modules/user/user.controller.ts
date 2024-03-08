@@ -114,10 +114,9 @@ export class UserController {
 
     @Post('wxSignIn')
     async wxSignIn(@Body() wxSignInDto:WXSignInDto){
-        //appid:wx2a85e3b6ce370356
-        //appsecret:c896d09ff7539510c57051eac3b83acd
-        const appid='wx2a85e3b6ce370356'
-        const appsecret='c896d09ff7539510c57051eac3b83acd'
+     
+        const appid=process.env['APPID'];
+        const appsecret=process.env['APPSECRET']
         const granttype='wx_authorization'
 
         const{code,iv,encryptedData}=wxSignInDto;
@@ -162,13 +161,9 @@ export class UserController {
       const username=body.username;
       const iat=body.iat;
     
-      return await this.refreshToken1(username,iat)
+      return await this.refreshToken1(username,iat)}
 
 
-    const username = body.username;
-    const iat = body.iat;
-
-    return await this.refreshToken1(username, iat)
 
 
     @Post('getVerifyCode')

@@ -15,7 +15,7 @@ export const passValidUrlList = [
 
   '/user/signIn',
   '/user/signUp',
-  '/user/getVerifyCode'
+  '/user/getVerifyCode',
   // temporary
   '/oss/signature',
 
