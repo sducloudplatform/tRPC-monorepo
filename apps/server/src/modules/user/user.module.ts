@@ -11,8 +11,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from '@server/auth/access-token.guard';
 import redisConfig from '@server/commom/config/redis.config';
-
-
+import {verificationCodeModule} from './verificationcode/verificationcode.module'
+import {HttpModule} from '@nestjs/axios'
 // import { AppController } from './app.controller';
 
 @Module({
@@ -20,7 +20,9 @@ import redisConfig from '@server/commom/config/redis.config';
         ConfigModule.forFeature(jwtConfig),
         ConfigModule.forFeature(redisConfig),
         JwtModule,
-        
+        verificationCodeModule,
+        HttpModule,
+     
    
        
         
