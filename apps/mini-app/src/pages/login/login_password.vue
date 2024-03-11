@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { postLoginPasswordAPI } from '@/services/login';
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
@@ -13,11 +14,22 @@ import { ref } from 'vue'
 // const onLogin_wx = async () => {
 //   uni.navigateTo({url:'pages/login/login_wx'})
 // }
+const loginForm = ref({
+  username: '',
+  password: '',
+})
+
 
 const onlogin_wx = () =>{
   uni.redirectTo({url:'./login_wx'})
 }
 
+const onGetpasswordnumber = async(ev)=>{
+  console.log(loginForm.value);
+  const res = await postLoginPasswordAPI(loginForm.value)
+  console.log(res);
+  
+}
 
 // // 获取用户手机号码
 // const onGetphonenumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
@@ -76,9 +88,9 @@ const onlogin_wx = () =>{
         账号密码登录
       </button> -->
        <!-- 网页端表单登录 -->
-      <input class="input" type="text" placeholder="请输入用户名/手机号码" /> 
-      <input class="input" type="text" password placeholder="请输入密码" />
-      <button class="button phone">登录</button>
+      <input class="input" type="text" placeholder="请输入用户名/手机号码"  v-model="loginForm.username"/> 
+      <input class="input" type="text" password="true" placeholder="请输入密码" v-model="loginForm.password" />
+      <button class="button phone" @tap="onGetpasswordnumber">登录</button>
       
       <!-- #endif -->
       <view class="extra">
@@ -94,7 +106,7 @@ const onlogin_wx = () =>{
 				<!-- </navigator> -->
         </view>
       </view>
-      <view class="tips">登录/注册即视为你同意《服务条款》</view>
+      <view class="tips">登录/<navigator url="../register/register" hover-class="navigator-hover" open-type="navigate" style="margin: 0%;"><text style="color: darksalmon;">注册</text></navigator>即视为你同意《服务条款》</view>
     </view>
   </view>
 </template>

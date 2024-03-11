@@ -84,7 +84,8 @@ const onlogin_password = () =>{
           </button>
         </view>
       </view>
-      <view class="tips">登录/注册即视为你同意《服务条款》</view>
+      <view class="tips">登录/<navigator url="../register/register" hover-class="navigator-hover" open-type="navigate" style="margin: 0%;"><text style="color: darksalmon;">注册</text></navigator>即视为你同意《服务条款》</view>
+
     </view>
   </view>
 </template>

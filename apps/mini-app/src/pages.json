@@ -55,14 +55,16 @@
 			}
 		},
 		{
-		
-				
 			"path": "pages/user/profiles",
 			"style": {
 				"navigationBarTitleText": "个人信息"
-		}
-				
-			
+			}
+		},
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
 		}
 	],
 	"globalStyle": {
@@ -108,5 +110,4 @@
 			}
 		]
 	}
-	
 }
